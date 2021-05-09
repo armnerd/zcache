@@ -1,6 +1,6 @@
-# Zedis
+# go-cache
 
-Golang自制Redis实现 ᕕ( ᐛ )ᕗ
+Golang 简易 Redis实现 ᕕ( ᐛ )ᕗ
 
 ### String
 
@@ -14,7 +14,7 @@ Golang自制Redis实现 ᕕ( ᐛ )ᕗ
 
 ###  List
 
-* quicklist: 一个大的ziplist, 切成段, 段与段之间双向链表连接
+* quicklist: 一个大的 ziplist, 切成段, 段与段之间双向链表连接
 * ziplist: 元素挨元素, 并记录元素长度, 节省空间
 
 |   命令   |   描述   |
@@ -28,9 +28,9 @@ Golang自制Redis实现 ᕕ( ᐛ )ᕗ
 
 ### Hash[dict]
 
-* 两个 hashtable轮替 [扩容缩容时rehash]
+* 两个 hashtable 轮替 [扩容缩容时 rehash]
 * hashtable: 一维数组加二维链表
-* 链表里储存key以及value
+* 链表里储存 key 以及 value
 
 |   命令   |   描述   |
 | ---- | ---- |
@@ -43,7 +43,7 @@ Golang自制Redis实现 ᕕ( ᐛ )ᕗ
 
 ### Set
 
-> 使用dict储存key, value为NULL
+> 使用 dict 储存 key, value 为 NULL
 
 |   命令   |   描述   |
 | ---- | ---- |
@@ -54,7 +54,7 @@ Golang自制Redis实现 ᕕ( ᐛ )ᕗ
 
 ### Zset
 
-* 使用dict储存value 和 score 值的映射关系
+* 使用 dict 储存 value 和 score 值的映射关系
 * skiplist: 底层链表方便区间查询, 相当于反方向二叉树, 方便插入及查询
 
 |   命令   |   描述   |
