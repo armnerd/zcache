@@ -1,4 +1,4 @@
-package common
+package cmd
 
 // Sadd 向集合添加一个成员
 func Sadd(key string, member string) string {

@@ -1,19 +1,20 @@
-package common
+package cmd
 
 import (
 	"strconv"
 
-	"github.com/armnerd/zcache/server/zset"
+	"github.com/armnerd/zcache/internal/data"
+	"github.com/armnerd/zcache/internal/zset"
 )
 
 // Zadd 向有序集合添加一个成员，或者更新已存在成员的分数
 func Zadd(key string, score string, member string) string {
 	scoreInt, _ := strconv.Atoi(score)
-	res, found := ZsetContainer[key]
+	res, found := data.ZsetContainer[key]
 	if !found {
 		res = zset.NewZset()
 		res.Put(member, scoreInt)
-		ZsetContainer[key] = res
+		data.ZsetContainer[key] = res
 	} else {
 		res.Put(member, scoreInt)
 	}
@@ -24,7 +25,7 @@ func Zadd(key string, score string, member string) string {
 func Zrangebyscore(key string, min string, max string) string {
 	minInt, _ := strconv.Atoi(min)
 	maxInt, _ := strconv.Atoi(max)
-	res, found := ZsetContainer[key]
+	res, found := data.ZsetContainer[key]
 	if !found {
 		return "not found"
 	}
@@ -33,7 +34,7 @@ func Zrangebyscore(key string, min string, max string) string {
 
 // Zscore 返回有序集中，成员的分数值
 func Zscore(key string, member string) string {
-	res, found := ZsetContainer[key]
+	res, found := data.ZsetContainer[key]
 	if !found {
 		return "not found"
 	}
@@ -42,7 +43,7 @@ func Zscore(key string, member string) string {
 
 // Zrem 移除有序集合中的一个成员
 func Zrem(key string, member string) string {
-	res, found := ZsetContainer[key]
+	res, found := data.ZsetContainer[key]
 	if !found {
 		return "not found"
 	}

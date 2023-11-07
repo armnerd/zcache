@@ -1,19 +1,20 @@
-package common
+package cmd
 
 import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/armnerd/zcache/server/hash"
+	"github.com/armnerd/zcache/internal/data"
+	"github.com/armnerd/zcache/internal/hash"
 )
 
 // Hset 将哈希表 key 中的字段 field 的值设为 value
 func Hset(key string, field string, value string) string {
-	res, found := HashContainer[key]
+	res, found := data.HashContainer[key]
 	if !found {
 		res = hash.New()
 		res.Put(field, value)
-		HashContainer[key] = res
+		data.HashContainer[key] = res
 	} else {
 		res.Put(field, value)
 	}
@@ -22,7 +23,7 @@ func Hset(key string, field string, value string) string {
 
 // Hget 获取存储在哈希表中指定字段的值
 func Hget(key string, field string) string {
-	res, found := HashContainer[key]
+	res, found := data.HashContainer[key]
 	if !found {
 		return "not found"
 	}
@@ -35,7 +36,7 @@ func Hget(key string, field string) string {
 
 // Hgetall 获取在哈希表中指定 key 的所有字段和值
 func Hgetall(key string) string {
-	res, found := HashContainer[key]
+	res, found := data.HashContainer[key]
 	if !found {
 		return "not found"
 	}
@@ -50,7 +51,7 @@ func Hgetall(key string) string {
 
 // Hkeys 获取所有哈希表中的字段
 func Hkeys(key string) string {
-	res, found := HashContainer[key]
+	res, found := data.HashContainer[key]
 	if !found {
 		return "not found"
 	}
@@ -60,7 +61,7 @@ func Hkeys(key string) string {
 
 // Hvals 获取哈希表中所有值
 func Hvals(key string) string {
-	res, found := HashContainer[key]
+	res, found := data.HashContainer[key]
 	if !found {
 		return "not found"
 	}
@@ -70,7 +71,7 @@ func Hvals(key string) string {
 
 // Hdel 删除一个哈希表字段
 func Hdel(key string, field string) string {
-	res, found := HashContainer[key]
+	res, found := data.HashContainer[key]
 	if !found {
 		return "not found"
 	}

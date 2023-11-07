@@ -1,4 +1,4 @@
-package common
+package cmd
 
 // Lpush 将一个值插入到列表头部
 func Lpush(key string, value string) string {

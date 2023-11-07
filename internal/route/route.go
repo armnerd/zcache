@@ -1,10 +1,8 @@
-package main
+package route
 
 import (
 	"fmt"
 	"strings"
-
-	"github.com/armnerd/zcache/server/common"
 
 	"github.com/aceld/zinx/ziface"
 	"github.com/aceld/zinx/znet"
@@ -29,7 +27,7 @@ func (rt *Router) Handle(request ziface.IRequest) {
 			args = append(args, arg)
 		}
 	}
-	var res = common.Handler(args)
+	var res = Handler(args)
 
 	// 回写消息
 	var echo = fmt.Sprint(res)
@@ -39,9 +37,7 @@ func (rt *Router) Handle(request ziface.IRequest) {
 	}
 }
 
-func main() {
-	s := znet.NewServer()
-	common.Init()
-	s.AddRouter(0, &Router{})
-	s.Serve()
+// Handler 功能分发
+func Handler(args []string) (ret interface{}) {
+	return
 }

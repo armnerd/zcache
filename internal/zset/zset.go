@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/armnerd/zcache/server/hash"
+	"github.com/armnerd/zcache/internal/hash"
 )
 
 // Zset 有序集合
