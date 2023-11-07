@@ -1,10 +1,10 @@
 package common
 
 import (
-	"zedis/server/hash"
-	"zedis/server/list"
-	"zedis/server/set"
-	"zedis/server/zset"
+	"github.com/armnerd/zcache/server/hash"
+	"github.com/armnerd/zcache/server/list"
+	"github.com/armnerd/zcache/server/set"
+	"github.com/armnerd/zcache/server/zset"
 )
 
 // StringContainer string容器

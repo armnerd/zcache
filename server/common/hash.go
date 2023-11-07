@@ -3,7 +3,8 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"zedis/server/hash"
+
+	"github.com/armnerd/zcache/server/hash"
 )
 
 // Hset 将哈希表 key 中的字段 field 的值设为 value

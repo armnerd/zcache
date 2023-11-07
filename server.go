@@ -1,4 +1,4 @@
-package main
+package zcache
 
 import (
 	"fmt"
@@ -13,6 +13,9 @@ import (
 // Router 路由
 type Router struct {
 	znet.BaseRouter
+}
+
+type Server struct {
 }
 
 // Handle 处理器

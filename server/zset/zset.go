@@ -3,7 +3,8 @@ package zset
 import (
 	"encoding/json"
 	"fmt"
-	"zedis/server/hash"
+
+	"github.com/armnerd/zcache/server/hash"
 )
 
 // Zset 有序集合

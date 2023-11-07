@@ -1,4 +1,4 @@
-module zedis
+module github.com/armnerd/zcache
 
 go 1.14
 
