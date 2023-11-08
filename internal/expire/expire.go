@@ -74,6 +74,7 @@ func Clean(ctx context.Context, gap time.Duration) {
 			select {
 			case <-timeTicker.C:
 				fmt.Printf("第%d波定时清理~\n", count)
+				do()
 				count++
 			case <-ctx.Done():
 				fmt.Println("let's call it a day")
@@ -81,4 +82,8 @@ func Clean(ctx context.Context, gap time.Duration) {
 			}
 		}
 	}()
+}
+
+func do() {
+	// undo
 }
