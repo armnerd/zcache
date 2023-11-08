@@ -1,6 +1,18 @@
 # go-cache
 
-Golang 简易 Redis实现 ᕕ( ᐛ )ᕗ
+Go 实现类 Redis 服务 ᕕ( ᐛ )ᕗ
+
+## Get Started
+
+```
+// 服务端启动
+cd test && go test -v
+
+// 客户端连接
+go run example/client.go
+```
+
+## Under the hood
 
 ### String
 

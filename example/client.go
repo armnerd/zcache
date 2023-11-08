@@ -1,12 +1,10 @@
-package client
+package main
 
 import (
-	"testing"
-
 	"github.com/armnerd/zcache"
 )
 
-func TestClient(t *testing.T) {
+func main() {
 	client := zcache.NewClient()
 	client.Run()
 }

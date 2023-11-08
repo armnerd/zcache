@@ -36,11 +36,10 @@ func (c *Client) Run() {
 	}
 
 	for {
-		// listen
+		// wait
 		fmt.Print("> : ")
 		fmt.Scanln(&input.first, &input.second, &input.third, &input.fourth)
 		command := fmt.Sprintf("%s %s %s %s", input.first, input.second, input.third, input.fourth)
-
 		// send and echo
 		echo := c.sendMsg(conn, command)
 		fmt.Printf("$ : %s\n", echo)
