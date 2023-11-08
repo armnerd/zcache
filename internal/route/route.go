@@ -39,5 +39,7 @@ func (rt *Router) Handle(request ziface.IRequest) {
 
 // Handler 功能分发
 func Handler(args []string) (ret interface{}) {
+	fmt.Println(args)
+	// undo
 	return
 }

@@ -7,6 +7,9 @@ import (
 )
 
 func TestServer(t *testing.T) {
-	server := zcache.NewServer()
+	server := zcache.NewServer(
+		zcache.WithCleanSeq(5),
+		zcache.WithLandSeq(5),
+	)
 	server.Run()
 }

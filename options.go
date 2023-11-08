@@ -1,8 +1,10 @@
 package zcache
 
 type Options struct {
-	Addr string
-	Port int
+	Addr     string
+	Port     int
+	CleanSeq int
+	LandSeq  int
 }
 
 type OptionFunc func(opts *Options)
@@ -30,5 +32,17 @@ func WithAddr(Addr string) OptionFunc {
 func WithPort(Port int) OptionFunc {
 	return func(opts *Options) {
 		opts.Port = Port
+	}
+}
+
+func WithCleanSeq(CleanSeq int) OptionFunc {
+	return func(opts *Options) {
+		opts.CleanSeq = CleanSeq
+	}
+}
+
+func WithLandSeq(LandSeq int) OptionFunc {
+	return func(opts *Options) {
+		opts.LandSeq = LandSeq
 	}
 }
