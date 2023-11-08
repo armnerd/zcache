@@ -18,18 +18,21 @@ type cmd struct {
 var input cmd
 
 type Client struct {
-	Addr string
-	Port string
+	opts *Options
 }
 
-func NewClient() *Client {
-	c := &Client{}
+func NewClient(opts ...OptionFunc) *Client {
+	options := loadOptions(opts...)
+	c := &Client{
+		opts: options,
+	}
 	return c
 }
 
 func (c *Client) Run() {
 	fmt.Println("Client start")
-	conn, err := net.Dial("tcp", "127.0.0.1:8999")
+	url := fmt.Sprintf("%s:%d", c.opts.Addr, c.opts.Port)
+	conn, err := net.Dial("tcp", url)
 	if err != nil {
 		fmt.Println("client start err, exit!")
 		return
@@ -50,7 +53,7 @@ func (c *Client) Run() {
 }
 
 func (c *Client) sendMsg(conn net.Conn, command string) string {
-	//发封包message消息
+	// 发封包 message 消息
 	dp := znet.NewDataPack()
 	msg, _ := dp.Pack(znet.NewMsgPackage(0, []byte(command)))
 	_, err := conn.Write(msg)
@@ -59,14 +62,14 @@ func (c *Client) sendMsg(conn net.Conn, command string) string {
 		return ""
 	}
 
-	//先读出流中的head部分
+	// 先读出流中的 head 部分
 	headData := make([]byte, dp.GetHeadLen())
-	_, err = io.ReadFull(conn, headData) //ReadFull 会把msg填充满为止
+	_, err = io.ReadFull(conn, headData) // ReadFull 会把 msg 填充满为止
 	if err != nil {
 		fmt.Println("read head error")
 		return ""
 	}
-	//将headData字节流 拆包到msg中
+	// 将 headData 字节流 拆包到 msg 中
 	msgHead, err := dp.Unpack(headData)
 	if err != nil {
 		fmt.Println("server unpack err:", err)
@@ -74,11 +77,11 @@ func (c *Client) sendMsg(conn net.Conn, command string) string {
 	}
 
 	if msgHead.GetDataLen() > 0 {
-		//msg 是有data数据的，需要再次读取data数据
+		// msg 是有 data 数据的，需要再次读取 data 数据
 		msg := msgHead.(*znet.Message)
 		msg.Data = make([]byte, msg.GetDataLen())
 
-		//根据dataLen从io中读取字节流
+		// 根据 dataLen 从 io 中读取字节流
 		_, err := io.ReadFull(conn, msg.Data)
 		if err != nil {
 			fmt.Println("server unpack data err:", err)
