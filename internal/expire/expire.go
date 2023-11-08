@@ -1,6 +1,8 @@
 package expire
 
 import (
+	"context"
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -56,7 +58,27 @@ func Record(key string, expire string, container ContainerType) {
 	}
 }
 
-// 定时清理
-func Clean(gap int) {
+// 检查是否过时
+func Check(key string) (res bool) {
+	// undo
+	return
+}
 
+// 定时清理
+func Clean(ctx context.Context, gap time.Duration) {
+	fmt.Println("开始定时清理~")
+	count := 0
+	go func() {
+		timeTicker := time.NewTicker(gap)
+		for {
+			select {
+			case <-timeTicker.C:
+				fmt.Printf("第%d波定时清理~\n", count)
+				count++
+			case <-ctx.Done():
+				fmt.Println("let's call it a day")
+				return
+			}
+		}
+	}()
 }

@@ -94,6 +94,7 @@ func Handler(args []string) (ret interface{}) {
 
 // 顺序消费，避免冲突，和 redis 一样的套路
 func OneLineSky(ctx context.Context) {
+	fmt.Println("开始处理写操作~")
 	go func() {
 		for {
 			select {

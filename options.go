@@ -1,10 +1,12 @@
 package zcache
 
+import "time"
+
 type Options struct {
 	Addr     string
 	Port     int
-	CleanSeq int
-	LandSeq  int
+	CleanSeq time.Duration
+	LandSeq  time.Duration
 }
 
 type OptionFunc func(opts *Options)
@@ -35,13 +37,13 @@ func WithPort(Port int) OptionFunc {
 	}
 }
 
-func WithCleanSeq(CleanSeq int) OptionFunc {
+func WithCleanSeq(CleanSeq time.Duration) OptionFunc {
 	return func(opts *Options) {
 		opts.CleanSeq = CleanSeq
 	}
 }
 
-func WithLandSeq(LandSeq int) OptionFunc {
+func WithLandSeq(LandSeq time.Duration) OptionFunc {
 	return func(opts *Options) {
 		opts.LandSeq = LandSeq
 	}
