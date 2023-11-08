@@ -102,31 +102,31 @@ func OneLineSky(ctx context.Context) {
 				first := cmd.RedisCmd(arg[0])
 				switch first {
 				case cmd.SET:
-					// undo
+					cmd.Set(arg[1], arg[2])
 				case cmd.DEL:
-					// undo
+					cmd.Del(arg[1])
 				case cmd.HSET:
-					// undo
+					cmd.Hset(arg[1], arg[2], arg[3])
 				case cmd.HDEL:
-					// undo
+					cmd.Hdel(arg[1], arg[2])
 				case cmd.LPUSH:
-					// undo
+					cmd.Lpush(arg[1], arg[2], arg[3])
 				case cmd.LPOP:
-					// undo
+					// cmd.Lpop(arg[1])
 				case cmd.RPUSH:
-					// undo
+					cmd.Rpush(arg[1], arg[2], arg[3])
 				case cmd.RPOP:
-					// undo
+					// cmd.Rpop(arg[1])
 				case cmd.SADD:
-					// undo
+					cmd.Sadd(arg[1], arg[2])
 				case cmd.SPOP:
-					// undo
+					// cmd.Spop(arg[1])
 				case cmd.SREM:
-					// undo
+					cmd.Srem(arg[1], arg[2])
 				case cmd.ZADD:
-					// undo
+					cmd.Zadd(arg[1], arg[2], arg[3], arg[4])
 				case cmd.ZREM:
-					// undo
+					cmd.Zrem(arg[1], arg[2])
 				}
 			case <-ctx.Done():
 				fmt.Println("let's call it a day")

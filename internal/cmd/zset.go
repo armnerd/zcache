@@ -9,7 +9,7 @@ import (
 )
 
 // Zadd 向有序集合添加一个成员，或者更新已存在成员的分数
-func Zadd(key string, score string, member string, extra ...string) string {
+func Zadd(key string, score string, member string, extra ...string) {
 	scoreInt, _ := strconv.Atoi(score)
 	res, found := data.ZsetContainer[key]
 	if !found {
@@ -24,7 +24,6 @@ func Zadd(key string, score string, member string, extra ...string) string {
 			expire.Record(key, extra[k], expire.ZSET)
 		}
 	}
-	return "ok"
 }
 
 // Zrangebyscore 通过分数返回有序集合指定区间内的成员
@@ -48,10 +47,10 @@ func Zscore(key string, member string) string {
 }
 
 // Zrem 移除有序集合中的一个成员
-func Zrem(key string, member string) string {
+func Zrem(key string, member string) {
 	res, found := data.ZsetContainer[key]
 	if !found {
-		return "not found"
+		return
 	}
-	return res.RemoveMember(member)
+	res.RemoveMember(member)
 }
