@@ -63,95 +63,75 @@ func Handler(args []string) (ret string) {
 		ret = "illegal command"
 		return
 	}
-	_, kind := cmd.CmdWrite[first]
-	if kind {
-		res := make(chan string)
-		theOne := bullet{
-			Args: args,
-			Res:  res,
-		}
-		// 写操作的异步处理
-		commandQuene <- theOne
-		ret = <-res
-		return
-	} else {
-		// 读取类直接操作
-		switch first {
-		case cmd.GET:
-			ret = cmd.Get(args[1])
-		case cmd.HGET:
-			ret = cmd.Hget(args[1], args[2])
-		case cmd.HGETALL:
-			ret = cmd.Hgetall(args[1])
-		case cmd.HKEYS:
-			ret = cmd.Hkeys(args[1])
-		case cmd.HVALS:
-			ret = cmd.Hvals(args[1])
-		case cmd.LRANGE:
-			ret = cmd.Lrange(args[1], args[2], args[3])
-		case cmd.LLEN:
-			ret = cmd.Llen(args[1])
-		case cmd.SMEMBERS:
-			ret = cmd.Smembers(args[1])
-		case cmd.ZRANGEBYSCORE:
-			ret = cmd.Zrangebyscore(args[1], args[2], args[3])
-		case cmd.ZSCORE:
-			ret = cmd.Zscore(args[1], args[2])
-		}
+	resQ := make(chan string)
+	b := bullet{
+		Args: args,
+		Res:  resQ,
 	}
+	commandQuene <- b
+	ret = <-resQ
 	return
 }
 
 // 顺序消费，避免冲突，和 redis 一样的套路
 func OneLineSky(ctx context.Context) {
-	fmt.Println("开始处理写操作~")
+	fmt.Println("一线天开始工作~")
 	go func() {
 		for {
 			select {
 			case bullet := <-commandQuene:
-				arg := bullet.Args
-				first := cmd.RedisCmd(arg[0])
+				args := bullet.Args
+				ret := "ok"
+				first := cmd.RedisCmd(args[0])
 				switch first {
 				case cmd.SET:
-					cmd.Set(arg[1], arg[2])
-					bullet.Res <- "ok"
+					cmd.Set(args[1], args[2])
+				case cmd.GET:
+					ret = cmd.Get(args[1])
 				case cmd.DEL:
-					cmd.Del(arg[1])
-					bullet.Res <- "ok"
+					cmd.Del(args[1])
 				case cmd.HSET:
-					cmd.Hset(arg[1], arg[2], arg[3])
-					bullet.Res <- "ok"
+					cmd.Hset(args[1], args[2], args[3])
+				case cmd.HGET:
+					ret = cmd.Hget(args[1], args[2])
+				case cmd.HGETALL:
+					ret = cmd.Hgetall(args[1])
+				case cmd.HKEYS:
+					ret = cmd.Hkeys(args[1])
+				case cmd.HVALS:
+					ret = cmd.Hvals(args[1])
 				case cmd.HDEL:
-					cmd.Hdel(arg[1], arg[2])
-					bullet.Res <- "ok"
+					cmd.Hdel(args[1], args[2])
 				case cmd.LPUSH:
-					cmd.Lpush(arg[1], arg[2], arg[3])
-					bullet.Res <- "ok"
+					cmd.Lpush(args[1], args[2], args[3])
 				case cmd.LPOP:
-					res := cmd.Lpop(arg[1])
-					bullet.Res <- res
+					ret = cmd.Lpop(args[1])
 				case cmd.RPUSH:
-					cmd.Rpush(arg[1], arg[2], arg[3])
-					bullet.Res <- "ok"
+					cmd.Rpush(args[1], args[2], args[3])
 				case cmd.RPOP:
-					res := cmd.Rpop(arg[1])
-					bullet.Res <- res
+					ret = cmd.Rpop(args[1])
+				case cmd.LRANGE:
+					ret = cmd.Lrange(args[1], args[2], args[3])
+				case cmd.LLEN:
+					ret = cmd.Llen(args[1])
 				case cmd.SADD:
-					cmd.Sadd(arg[1], arg[2])
-					bullet.Res <- "ok"
+					cmd.Sadd(args[1], args[2])
 				case cmd.SPOP:
-					res := cmd.Spop(arg[1])
-					bullet.Res <- res
+					ret = cmd.Spop(args[1])
+				case cmd.SMEMBERS:
+					ret = cmd.Smembers(args[1])
 				case cmd.SREM:
-					cmd.Srem(arg[1], arg[2])
-					bullet.Res <- "ok"
+					cmd.Srem(args[1], args[2])
 				case cmd.ZADD:
-					cmd.Zadd(arg[1], arg[2], arg[3], arg[4])
-					bullet.Res <- "ok"
+					cmd.Zadd(args[1], args[2], args[3], args[4])
+				case cmd.ZRANGEBYSCORE:
+					ret = cmd.Zrangebyscore(args[1], args[2], args[3])
+				case cmd.ZSCORE:
+					ret = cmd.Zscore(args[1], args[2])
 				case cmd.ZREM:
-					cmd.Zrem(arg[1], arg[2])
-					bullet.Res <- "ok"
+					cmd.Zrem(args[1], args[2])
 				}
+				bullet.Res <- ret
 			case <-ctx.Done():
 				fmt.Println("let's call it a day")
 				return

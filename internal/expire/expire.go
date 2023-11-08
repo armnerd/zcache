@@ -66,7 +66,7 @@ func Check(key string) (res bool) {
 
 // 定时清理
 func Clean(ctx context.Context, gap time.Duration) {
-	fmt.Println("开始定时清理~")
+	fmt.Println("定时清理开始工作~")
 	count := 0
 	go func() {
 		timeTicker := time.NewTicker(gap)

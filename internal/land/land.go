@@ -8,7 +8,7 @@ import (
 
 // 定时持久化
 func Land(ctx context.Context, gap time.Duration) {
-	fmt.Println("开始定时持久化~")
+	fmt.Println("定时持久化开始工作~")
 	count := 0
 	go func() {
 		timeTicker := time.NewTicker(gap)

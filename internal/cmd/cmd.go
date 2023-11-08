@@ -35,7 +35,6 @@ const (
 var (
 	CmdSet       []RedisCmd
 	CmdAvailable map[RedisCmd]bool
-	CmdWrite     map[RedisCmd]bool
 )
 
 func init() {
@@ -51,19 +50,4 @@ func init() {
 	for _, v := range CmdSet {
 		CmdAvailable[v] = true
 	}
-	// 所有写操作命令
-	CmdWrite = make(map[RedisCmd]bool)
-	CmdWrite[SET] = true
-	CmdWrite[DEL] = true
-	CmdWrite[HSET] = true
-	CmdWrite[HDEL] = true
-	CmdWrite[LPUSH] = true
-	CmdWrite[LPOP] = true
-	CmdWrite[RPUSH] = true
-	CmdWrite[RPOP] = true
-	CmdWrite[SADD] = true
-	CmdWrite[SPOP] = true
-	CmdWrite[SREM] = true
-	CmdWrite[ZADD] = true
-	CmdWrite[ZREM] = true
 }
