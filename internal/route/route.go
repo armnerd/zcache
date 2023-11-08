@@ -52,7 +52,7 @@ func (rt *Router) Handle(request ziface.IRequest) {
 }
 
 // Handler 功能分发
-func Handler(args []string) (ret string) {
+func Handler(args []string) (ret interface{}) {
 	if len(args) == 0 {
 		ret = "no command found"
 		return
@@ -70,6 +70,7 @@ func Handler(args []string) (ret string) {
 	}
 	commandQuene <- b
 	ret = <-resQ
+	fmt.Printf("返回客户端的数据是[%s]\n", ret)
 	return
 }
 
@@ -83,6 +84,8 @@ func OneLineSky(ctx context.Context) {
 				args := bullet.Args
 				ret := "ok"
 				first := cmd.RedisCmd(args[0])
+				fmt.Printf("接到[%s]的操作命令\n", first)
+				fmt.Println(args)
 				switch first {
 				case cmd.SET:
 					cmd.Set(args[1], args[2])
@@ -131,6 +134,7 @@ func OneLineSky(ctx context.Context) {
 				case cmd.ZREM:
 					cmd.Zrem(args[1], args[2])
 				}
+				fmt.Printf("一线天处理后的数据是[%s]\n", ret)
 				bullet.Res <- ret
 			case <-ctx.Done():
 				fmt.Println("let's call it a day")
