@@ -1,6 +1,8 @@
 package zcache
 
 import (
+	"context"
+
 	"github.com/aceld/zinx/ziface"
 	"github.com/aceld/zinx/znet"
 	"github.com/armnerd/zcache/internal/expire"
@@ -25,6 +27,9 @@ func NewServer(opts ...OptionFunc) *Server {
 }
 
 func (s *Server) Run() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	route.OneLineSky(ctx)            // 写操作排队执行
 	go expire.Clean(s.opts.CleanSeq) // 清理过期数据
 	go land.Land(s.opts.LandSeq)     // 定时持久化
 	s.zinx.Serve()

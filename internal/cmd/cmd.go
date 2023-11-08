@@ -7,7 +7,7 @@ const (
 	GET           RedisCmd = "get"
 	DEL           RedisCmd = "del"
 	HSET          RedisCmd = "hset"
-	GSET          RedisCmd = "hget"
+	HGET          RedisCmd = "hget"
 	HGETALL       RedisCmd = "hgetall"
 	HKEYS         RedisCmd = "hkeys"
 	HVALS         RedisCmd = "hvals"
@@ -32,10 +32,38 @@ const (
 	EXTRA_EXPIRE int = 0
 )
 
-var CmdAvailable = []RedisCmd{
-	SET, GET, DEL, // string
-	HSET, GSET, HGETALL, HKEYS, HVALS, HDEL, // hash
-	LPUSH, LPOP, RPUSH, RPOP, LRANGE, LLEN, // list
-	SADD, SMEMBERS, SPOP, SREM, // set
-	ZADD, ZRANGEBYSCORE, ZSCORE, ZREM, // zset
+var (
+	CmdSet       []RedisCmd
+	CmdAvailable map[RedisCmd]bool
+	CmdWrite     map[RedisCmd]bool
+)
+
+func init() {
+	CmdSet = []RedisCmd{
+		SET, GET, DEL, // string
+		HSET, HGET, HGETALL, HKEYS, HVALS, HDEL, // hash
+		LPUSH, LPOP, RPUSH, RPOP, LRANGE, LLEN, // list
+		SADD, SMEMBERS, SPOP, SREM, // set
+		ZADD, ZRANGEBYSCORE, ZSCORE, ZREM, // zset
+	}
+	// 所有可用命令
+	CmdAvailable = make(map[RedisCmd]bool)
+	for _, v := range CmdSet {
+		CmdAvailable[v] = true
+	}
+	// 所有写操作命令
+	CmdWrite = make(map[RedisCmd]bool)
+	CmdWrite[SET] = true
+	CmdWrite[DEL] = true
+	CmdWrite[HSET] = true
+	CmdWrite[HDEL] = true
+	CmdWrite[LPUSH] = true
+	CmdWrite[LPOP] = true
+	CmdWrite[RPUSH] = true
+	CmdWrite[RPOP] = true
+	CmdWrite[SADD] = true
+	CmdWrite[SPOP] = true
+	CmdWrite[SREM] = true
+	CmdWrite[ZADD] = true
+	CmdWrite[ZREM] = true
 }
