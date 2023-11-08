@@ -38,14 +38,22 @@ func Record(key string, expire string, container ContainerType) {
 		return
 	}
 	now := time.Now().Unix()
-	record := ExpireInfo{
-		Key:       key,
-		Expire:    now + e,
-		Container: container,
-		Index:     len(TimeMachine),
+	oldRecord, found := KeyExpireMap[key]
+	if found {
+		// 更新过期时间
+		oldRecord.Expire = now + e
+		TimeMachine[oldRecord.Index] = oldRecord
+		KeyExpireMap[key] = oldRecord
+	} else {
+		record := ExpireInfo{
+			Key:       key,
+			Expire:    now + e,
+			Container: container,
+			Index:     len(TimeMachine),
+		}
+		TimeMachine = append(TimeMachine, record)
+		KeyExpireMap[key] = record
 	}
-	TimeMachine = append(TimeMachine, record)
-	KeyExpireMap[key] = record
 }
 
 // 定时清理
