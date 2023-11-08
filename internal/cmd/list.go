@@ -1,7 +1,14 @@
 package cmd
 
+import "github.com/armnerd/zcache/internal/expire"
+
 // Lpush 将一个值插入到列表头部
-func Lpush(key string, value string) string {
+func Lpush(key string, value string, extra ...string) string {
+	for k := range extra {
+		if k == EXTRA_EXPIRE {
+			expire.Record(key, extra[k], expire.LIST)
+		}
+	}
 	return "ok"
 }
 
@@ -11,7 +18,12 @@ func Lpop(key string) string {
 }
 
 // Rpush 将一个值插入到列表尾部
-func Rpush(key string, value string) string {
+func Rpush(key string, value string, extra ...string) string {
+	for k := range extra {
+		if k == EXTRA_EXPIRE {
+			expire.Record(key, extra[k], expire.LIST)
+		}
+	}
 	return "ok"
 }
 

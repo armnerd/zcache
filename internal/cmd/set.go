@@ -1,7 +1,14 @@
 package cmd
 
+import "github.com/armnerd/zcache/internal/expire"
+
 // Sadd 向集合添加一个成员
-func Sadd(key string, member string) string {
+func Sadd(key string, member string, extra ...string) string {
+	for k := range extra {
+		if k == EXTRA_EXPIRE {
+			expire.Record(key, extra[k], expire.SET)
+		}
+	}
 	return "ok"
 }
 

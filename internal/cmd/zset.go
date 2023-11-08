@@ -4,11 +4,12 @@ import (
 	"strconv"
 
 	"github.com/armnerd/zcache/internal/data"
+	"github.com/armnerd/zcache/internal/expire"
 	"github.com/armnerd/zcache/pkg/zset"
 )
 
 // Zadd 向有序集合添加一个成员，或者更新已存在成员的分数
-func Zadd(key string, score string, member string) string {
+func Zadd(key string, score string, member string, extra ...string) string {
 	scoreInt, _ := strconv.Atoi(score)
 	res, found := data.ZsetContainer[key]
 	if !found {
@@ -17,6 +18,11 @@ func Zadd(key string, score string, member string) string {
 		data.ZsetContainer[key] = res
 	} else {
 		res.Put(member, scoreInt)
+	}
+	for k := range extra {
+		if k == EXTRA_EXPIRE {
+			expire.Record(key, extra[k], expire.ZSET)
+		}
 	}
 	return "ok"
 }

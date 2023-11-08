@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"github.com/armnerd/zcache/internal/data"
+	"github.com/armnerd/zcache/internal/expire"
 	"github.com/armnerd/zcache/pkg/hash"
 )
 
 // Hset 将哈希表 key 中的字段 field 的值设为 value
-func Hset(key string, field string, value string) string {
+func Hset(key string, field string, value string, extra ...string) string {
 	res, found := data.HashContainer[key]
 	if !found {
 		res = hash.New()
@@ -17,6 +18,11 @@ func Hset(key string, field string, value string) string {
 		data.HashContainer[key] = res
 	} else {
 		res.Put(field, value)
+	}
+	for k := range extra {
+		if k == EXTRA_EXPIRE {
+			expire.Record(key, extra[k], expire.HASH)
+		}
 	}
 	return "ok"
 }
