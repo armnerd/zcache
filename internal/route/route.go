@@ -11,10 +11,15 @@ import (
 )
 
 // 一线天
-var commandQuene chan []string
+var commandQuene chan bullet
 
 func init() {
-	commandQuene = make(chan []string, 5)
+	commandQuene = make(chan bullet, 5)
+}
+
+type bullet struct {
+	Args []string
+	Res  chan string
 }
 
 // Router 路由
@@ -36,7 +41,7 @@ func (rt *Router) Handle(request ziface.IRequest) {
 			args = append(args, arg)
 		}
 	}
-	var res = Handler(args)
+	res := Handler(args)
 
 	// 回写消息
 	var echo = fmt.Sprint(res)
@@ -60,9 +65,14 @@ func Handler(args []string) (ret interface{}) {
 	}
 	_, kind := cmd.CmdWrite[first]
 	if kind {
+		res := make(chan string)
+		theOne := bullet{
+			Args: args,
+			Res:  res,
+		}
 		// 写操作的异步处理
-		commandQuene <- args
-		ret = "done"
+		commandQuene <- theOne
+		ret = <-res
 		return
 	} else {
 		// 读取类直接操作
@@ -98,35 +108,49 @@ func OneLineSky(ctx context.Context) {
 	go func() {
 		for {
 			select {
-			case arg := <-commandQuene:
+			case bullet := <-commandQuene:
+				arg := bullet.Args
 				first := cmd.RedisCmd(arg[0])
 				switch first {
 				case cmd.SET:
 					cmd.Set(arg[1], arg[2])
+					bullet.Res <- "ok"
 				case cmd.DEL:
 					cmd.Del(arg[1])
+					bullet.Res <- "ok"
 				case cmd.HSET:
 					cmd.Hset(arg[1], arg[2], arg[3])
+					bullet.Res <- "ok"
 				case cmd.HDEL:
 					cmd.Hdel(arg[1], arg[2])
+					bullet.Res <- "ok"
 				case cmd.LPUSH:
 					cmd.Lpush(arg[1], arg[2], arg[3])
+					bullet.Res <- "ok"
 				case cmd.LPOP:
-					// cmd.Lpop(arg[1])
+					res := cmd.Lpop(arg[1])
+					bullet.Res <- res
 				case cmd.RPUSH:
 					cmd.Rpush(arg[1], arg[2], arg[3])
+					bullet.Res <- "ok"
 				case cmd.RPOP:
-					// cmd.Rpop(arg[1])
+					res := cmd.Rpop(arg[1])
+					bullet.Res <- res
 				case cmd.SADD:
 					cmd.Sadd(arg[1], arg[2])
+					bullet.Res <- "ok"
 				case cmd.SPOP:
-					// cmd.Spop(arg[1])
+					res := cmd.Spop(arg[1])
+					bullet.Res <- res
 				case cmd.SREM:
 					cmd.Srem(arg[1], arg[2])
+					bullet.Res <- "ok"
 				case cmd.ZADD:
 					cmd.Zadd(arg[1], arg[2], arg[3], arg[4])
+					bullet.Res <- "ok"
 				case cmd.ZREM:
 					cmd.Zrem(arg[1], arg[2])
+					bullet.Res <- "ok"
 				}
 			case <-ctx.Done():
 				fmt.Println("let's call it a day")
