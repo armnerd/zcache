@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/armnerd/zcache/internal/data"
-	"github.com/armnerd/zcache/internal/zset"
+	"github.com/armnerd/zcache/pkg/zset"
 )
 
 // Zadd 向有序集合添加一个成员，或者更新已存在成员的分数

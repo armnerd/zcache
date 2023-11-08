@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/armnerd/zcache/internal/hash"
+	"github.com/armnerd/zcache/pkg/hash"
 )
 
 // Zset 有序集合
@@ -21,10 +21,7 @@ type Iterm struct {
 
 // Less 比较函数
 func (u *Iterm) Less(other interface{}) bool {
-	if u.score > other.(*Iterm).score {
-		return true
-	}
-	return false
+	return u.score > other.(*Iterm).score
 }
 
 // NewZset instantiates a zset.
@@ -47,7 +44,6 @@ func (z *Zset) Put(key string, score int) {
 		z.scoreSet.Insert(&Iterm{score, key})
 	}
 	z.keyMap.Put(key, score)
-	return
 }
 
 // Members get all member from zset.

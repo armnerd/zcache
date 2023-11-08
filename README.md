@@ -4,6 +4,7 @@ Go 实现类 Redis 服务 ᕕ( ᐛ )ᕗ
 
 * 基础的 tcp 服务和 redis 数据结构
 * 非精确的数据过期机制以及持久化机制
+* 使用 channel 保证命令顺序执行
 
 ## Get Started
 

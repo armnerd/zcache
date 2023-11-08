@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/armnerd/zcache/internal/data"
-	"github.com/armnerd/zcache/internal/hash"
+	"github.com/armnerd/zcache/pkg/hash"
 )
 
 // Hset 将哈希表 key 中的字段 field 的值设为 value

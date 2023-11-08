@@ -1,10 +1,10 @@
 package data
 
 import (
-	"github.com/armnerd/zcache/internal/hash"
-	"github.com/armnerd/zcache/internal/list"
-	"github.com/armnerd/zcache/internal/set"
-	"github.com/armnerd/zcache/internal/zset"
+	"github.com/armnerd/zcache/pkg/hash"
+	"github.com/armnerd/zcache/pkg/list"
+	"github.com/armnerd/zcache/pkg/set"
+	"github.com/armnerd/zcache/pkg/zset"
 )
 
 // StringContainer string容器
