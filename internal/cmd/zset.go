@@ -17,6 +17,8 @@ func Zadd(key string, score string, member string, extra ...string) {
 		res.Put(member, scoreInt)
 		data.ZsetContainer[key] = res
 	} else {
+		// 检查是否过期
+		// 过期则删除重建
 		res.Put(member, scoreInt)
 	}
 	for k := range extra {
@@ -34,6 +36,7 @@ func Zrangebyscore(key string, min string, max string) string {
 	if !found {
 		return "not found"
 	}
+	// 检查是否过期
 	return res.Members(minInt, maxInt)
 }
 
@@ -43,6 +46,7 @@ func Zscore(key string, member string) string {
 	if !found {
 		return "not found"
 	}
+	// 检查是否过期
 	return res.GetScore(member)
 }
 

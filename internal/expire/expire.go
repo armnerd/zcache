@@ -60,7 +60,7 @@ func Record(key string, expire string, container ContainerType) {
 
 // 检查是否过时
 func Check(key string) (res bool) {
-	// undo
+	// 如果过期则删除相关所有信息
 	return
 }
 

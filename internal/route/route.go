@@ -52,7 +52,7 @@ func (rt *Router) Handle(request ziface.IRequest) {
 }
 
 // Handler 功能分发
-func Handler(args []string) (ret interface{}) {
+func Handler(args []string) (ret string) {
 	if len(args) == 0 {
 		ret = "no command found"
 		return
@@ -78,25 +78,25 @@ func Handler(args []string) (ret interface{}) {
 		// 读取类直接操作
 		switch first {
 		case cmd.GET:
-			// undo
+			ret = cmd.Get(args[1])
 		case cmd.HGET:
-			// undo
+			ret = cmd.Hget(args[1], args[2])
 		case cmd.HGETALL:
-			// undo
+			ret = cmd.Hgetall(args[1])
 		case cmd.HKEYS:
-			// undo
+			ret = cmd.Hkeys(args[1])
 		case cmd.HVALS:
-			// undo
+			ret = cmd.Hvals(args[1])
 		case cmd.LRANGE:
-			// undo
+			ret = cmd.Lrange(args[1], args[2], args[3])
 		case cmd.LLEN:
-			// undo
+			ret = cmd.Llen(args[1])
 		case cmd.SMEMBERS:
-			// undo
+			ret = cmd.Smembers(args[1])
 		case cmd.ZRANGEBYSCORE:
-			// undo
+			ret = cmd.Zrangebyscore(args[1], args[2], args[3])
 		case cmd.ZSCORE:
-			// undo
+			ret = cmd.Zscore(args[1], args[2])
 		}
 	}
 	return
